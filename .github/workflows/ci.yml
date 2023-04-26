@@ -8,24 +8,24 @@ jobs:
     steps:
     - name: Check out code
       uses: actions/checkout@v3
-    - name: 'Building Docker Image'
-      run: docker build . --file Dockerfile --build-arg RUNNER_VERSION=2.303.0 --tag github-runner --no-cache --progress=plain
+#     - name: 'Building Docker Image'
+#       run: docker build . --file Dockerfile --build-arg RUNNER_VERSION=2.303.0 --tag github-runner --no-cache --progress=plain
     - name: Obtain a GitHub App Installation Access Token
       id: githubAppAuth
       run: |
         TOKEN="$(npx obtain-github-app-installation-access-token ci ${{ secrets.GH_APP_CREDENTIALS_TOKEN }})"
           echo "::add-mask::$TOKEN"
-          echo "::set-output name=token::$TOKEN"
-    - name: Use the obtained token
-      run: |
-          curl -X POST -H 'Content-Type: application/json' \
-            -d '{"context":"test","state":"success"}' \
-            "https://api.github.com/repos/$GITHUB_REPOSITORY/statuses/$GITHUB_SHA?access_token=$GITHUB_TOKEN"
-      env:
-        GITHUB_TOKEN: ${{ steps.githubAppAuth.outputs.token }}  
-    - name: 'Setting Up GitHub Hosted Agent'
-      run: docker run -e GH_OWNER='ravigundapi' -e GH_REPOSITORY='gh-sh-runner' -d --name gh-hosted github-runner
-      env:
-          GITHUB_TOKEN: ${{ steps.githubAppAuth.outputs.token }}  
-    - name: 'Inspect runner'
-      run: docker logs -f gh-hosted
+          echo "token=TOKEN >>$TOKEN"
+#     - name: Use the obtained token
+#       run: |
+#           curl -X POST -H 'Content-Type: application/json' \
+#             -d '{"context":"test","state":"success"}' \
+#             "https://api.github.com/repos/$GITHUB_REPOSITORY/statuses/$GITHUB_SHA?access_token=$GITHUB_TOKEN"
+#       env:
+#         GITHUB_TOKEN: ${{ steps.githubAppAuth.outputs.token }}  
+#     - name: 'Setting Up GitHub Hosted Agent'
+#       run: docker run -e GH_OWNER='ravigundapi' -e GH_REPOSITORY='gh-sh-runner' -d --name gh-hosted github-runner
+#       env:
+#           GITHUB_TOKEN: ${{ steps.githubAppAuth.outputs.token }}  
+#     - name: 'Inspect runner'
+#       run: docker logs -f gh-hosted
