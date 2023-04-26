@@ -1,0 +1,14 @@
+name: 'terraform-workflow'
+on:
+  push:
+    branches:
+      - main
+      - 'release/**'
+  pull_request:
+
+jobs:
+  terraform:
+    name: 'Terraform'
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
