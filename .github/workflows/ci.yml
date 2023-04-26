@@ -11,5 +11,7 @@ jobs:
       
     - name: 'Building Docker Image'
       run: docker build . --file Dockerfile --build-arg RUNNER_VERSION=2.303.0 --tag github-runner --no-cache --progress=plain
-#     env:
-#       GH_TOKEN: ${{ secrets.GH_TOKEN }} 
+    - name: 'Setting Up GitHub Hosted Agent'
+      run: docker run -e GH_OWNER='ravigundapi' -e GH_REPOSITORY='gh-sh-runner' -d --name gh-hosted github-runner
+    env:
+      GH_TOKEN: ${{ secrets.GH_TOKEN }} 
