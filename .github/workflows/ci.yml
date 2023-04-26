@@ -2,9 +2,7 @@ name: Build Image
 on:
   push:
     branches:
-      - 'release/**'
-  pull_request:
-  
+      - 'release/**'  
 jobs:
   build:
     name: Build Image
