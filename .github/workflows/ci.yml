@@ -15,7 +15,10 @@ jobs:
       run: |
         TOKEN="$(npx obtain-github-app-installation-access-token ci ${{ secrets.GH_APP_CREDENTIALS_TOKEN }})"
           echo "::add-mask::$TOKEN"
-          echo "token=TOKEN" >>$GITHUB_OUTPUT
+          echo "token=$TOKEN" >>$GITHUB_ENV
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
     - name: Use the obtained token
       run: |
         curl -X POST -H 'Content-Type: application/json' \
