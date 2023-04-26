@@ -14,8 +14,8 @@ jobs:
     
     - name: 'Setting Up GitHub Hosted Agent'
       run: docker run -e GH_OWNER='ravigundapi' -e GH_REPOSITORY='gh-sh-runner' -d --name gh-hosted github-runner
-      with:
-        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      env:
+          GH_TOKEN: ${{ github.token }}
     - name: 'ECHO GitHub Token'
       run: | 
          echo "GH_TOKEN: $GH_TOKEN"
