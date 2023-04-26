@@ -16,5 +16,7 @@ jobs:
       run: docker run -e GH_OWNER='ravigundapi' -e GH_REPOSITORY='gh-sh-runner' -d --name gh-hosted github-runner
       with:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: ECHO TOKEN
+      run: echo $GITHUB_TOKEN
     - name: 'Inspect runner'
       run: docker logs -f gh-hosted
