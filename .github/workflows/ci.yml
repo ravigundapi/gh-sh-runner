@@ -1,17 +1,19 @@
-name: 'terraform-workflow'
+name: Build Image
 on:
   push:
     branches:
       - 'release/**'
   pull_request:
   
-  workflow_dispatch:
-  
 jobs:
-  build-container:
+  build:
+    name: Build Image
     runs-on: ubuntu-latest
+    
     steps:
-    - uses: actions/checkout@v3
+    - name: Check out code
+      uses: actions/checkout@v3
+      
     - name: 'Building Docker Image'
       run: docker build . --file Dockerfile --build-arg RUNNER_VERSION=2.303.0 --tag github-runner --no-cache --progress=plain
 #     env:
