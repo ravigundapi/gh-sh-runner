@@ -8,12 +8,12 @@ jobs:
     steps:
     - name: Check out code
       uses: actions/checkout@v3
+      
     - name: Install node and npm
       run: |
          sudo apt update -y
-         sudo apt install nodejs npm
-    - name: 'Building Docker Image'
-      run: docker build . --file Dockerfile --build-arg RUNNER_VERSION=2.303.0 --tag github-runner --no-cache --progress=plain      
+         sudo apt install nodejs npm    
+         
     - name: 'Obtain a GitHub App Installation Access Token'
       id: githubAppAuth
       run: |
@@ -24,6 +24,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GH_APP_CREDENTIALS_TOKEN: ${{ secrets.GH_APP_CREDENTIALS_TOKEN }}
+        
     - name: 'Use the obtained token'
       run: |
         curl -X POST -H 'Content-Type: application/json' \
@@ -32,10 +33,22 @@ jobs:
            "https://api.github.com/repos/ravigundapi/gh-sh-runner/statuses/$GITHUB_SHA?access_token=$GITHUB_TOKEN"
       env:
         GITHUB_TOKEN: ${{ steps.githubAppAuth.outputs.token }}    
+    
+    - name: 'Building Docker Image'
+      run: docker build . --file Dockerfile --build-arg RUNNER_VERSION=2.303.0 --tag github-runner --no-cache --progress=plain  
+    
+    - name: 'List Docker Image'
+      run: docker images
+    
     - name: 'Setting Up GitHub Hosted Agent'
       run: docker run -e GH_OWNER='ravigundapi' -e GH_REPOSITORY='gh-sh-runner' -e GH_TOKEN=${{ steps.githubAppAuth.outputs.token }} -d --name gh-hosted github-runner
-#       env:
-#           GITHUB_TOKEN: ${{ steps.githubAppAuth.outputs.token }}  
+      
+    - name: 'Building Docker Image'
+      run: |
+        docker ps
+        sleep 10
+        docker ps
+        docker ps -a
+        
     - name: 'Inspect runner'
       run: docker logs -f gh-hosted
-
