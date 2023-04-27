@@ -11,9 +11,10 @@ jobs:
     - name: Install node and npm
       run: |
          sudo apt update
-         sudo apt install Node.js
+         sudo apt install nodejs
+         sudo echo node -v
          sudo apt install npm 
-         sudo Node.js -v && npm --version 
+         sudo npm --version 
 #     - name: 'Building Docker Image'
 #       run: docker build . --file Dockerfile --build-arg RUNNER_VERSION=2.303.0 --tag github-runner --no-cache --progress=plain
     - name: Obtain a GitHub App Installation Access Token
