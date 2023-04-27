@@ -21,12 +21,13 @@ jobs:
     - name: Obtain a GitHub App Installation Access Token
       id: githubAppAuth
       run: |
-        TOKEN="$(/usr/local/bin/npx obtain-github-app-installation-access-token -a 324301 -i 36889031 -k ci ${{ secrets.GH_APP_CREDENTIALS_TOKEN }})"
+        TOKEN="$(/usr/local/bin/npx obtain-github-app-installation-access-token -a 324301 -i 36889031 -k ci $GH_APP_CREDENTIALS_TOKEN)"
           echo $TOKEN
           echo "::add-mask::$TOKEN"
           echo "token=$TOKEN" >>$GITHUB_OUTPUT
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}    
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_APP_CREDENTIALS_TOKEN: ${{ secrets.GH_APP_CREDENTIALS_TOKEN }}
     - name: Use the obtained token
       run: |
         curl -X POST -H 'Content-Type: application/json' \
