@@ -1,31 +1,34 @@
-# name: Build Image
-# on: [push]
+name: Build Image
+on: [push]
   
-# jobs:
-#   build:
-#     name: Build Image
-#     runs-on: ubuntu-latest
-#     steps:
-#     - name: Check out code
-#       uses: actions/checkout@v3
+jobs:
+  build:
+    name: Build Image
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v3
 #     - name: 'Building Docker Image'
 #       run: docker build . --file Dockerfile --build-arg RUNNER_VERSION=2.303.0 --tag github-runner --no-cache --progress=plain
-#     - name: Obtain a GitHub App Installation Access Token
-#       id: githubAppAuth
-#       run: |
-#         TOKEN="$(npx obtain-github-app-installation-access-token ci ${{ secrets.GH_APP_CREDENTIALS_TOKEN }})"
-#           echo "::add-mask::$TOKEN"
-#           echo "token=$TOKEN" >>$GITHUB_ENV
-#       env:
-#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}    
-#     - name: Use the obtained token
-#       run: |
-#         curl -X POST -H 'Content-Type: application/json' \
-#            -H "Authorization: Bearer $GITHUB_TOKEN" \
-#            -d '{"context":"test","state":"success"}' \
-#            "https://api.github.com/repos/ravigundapi/statuses/$GITHUB_SHA"
-#       env:
-#         GITHUB_TOKEN: ${{ steps.githubAppAuth.outputs.token }}
+    - name: Obtain a GitHub App Installation Access Token
+      id: githubAppAuth
+      run: |
+        TOKEN="$(npx obtain-github-app-installation-access-token ci ${{ secrets.GH_APP_CREDENTIALS_TOKEN }})"
+          echo "::add-mask::$TOKEN"
+          echo "token=$TOKEN" >>$GITHUB_OUTPUT
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}    
+    - name: Use the obtained token
+      run: |
+        curl -X POST -H 'Content-Type: application/json' \
+           -H "Authorization: Bearer $GITHUB_TOKEN" \
+           -d '{"context":"test","state":"success"}' \
+           "https://api.github.com/repos/ravigundapi/statuses/$GITHUB_SHA"
+        echo "The value is ${{ steps.githubAppAuth.outputs.token }}"
+      env:
+        GITHUB_TOKEN: ${{ steps.githubAppAuth.outputs.token }}
+        
+        
         
 #     - name: 'Setting Up GitHub Hosted Agent'
 #       run: docker run -e GH_OWNER='ravigundapi' -e GH_REPOSITORY='gh-sh-runner' -e GH_TOKEN=ghs_37sJSYLqBtY5UoCHoPW84j1L0uEqM70V66FE -d --name gh-hosted github-runner
@@ -34,24 +37,24 @@
 #     - name: 'Inspect runner'
 #       run: docker logs -f gh-hosted
 
-name: get-token
+# name: get-token
 
-on: [push]
+# on: [push]
 
-jobs:
+# jobs:
   
-  print-token:
-    permissions: write-all
-    name: print-token
-    environment: dev
-    # needs: pre-pkr
-    runs-on: ubuntu-latest
+#   print-token:
+#     permissions: write-all
+#     name: print-token
+#     environment: dev
+#     # needs: pre-pkr
+#     runs-on: ubuntu-latest
 
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v2
+#     steps:
+#       - name: Check out code
+#         uses: actions/checkout@v2
 
-      - name: Get registration token
-        id: getRegToken
-        run: |
-          curl -X POST -H \"Accept: application/vnd.github.v3+json\"  -H 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' https://api.github.com/repos/ravigundapi/gh-sh-runner/actions/runners/registration-token
+#       - name: Get registration token
+#         id: getRegToken
+#         run: |
+#           curl -X POST -H \"Accept: application/vnd.github.v3+json\"  -H 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' https://api.github.com/repos/ravigundapi/gh-sh-runner/actions/runners/registration-token
