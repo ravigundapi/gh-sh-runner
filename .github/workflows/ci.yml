@@ -37,12 +37,12 @@ jobs:
     - name: 'Reg Token'
       id: RegGithubAppAuth
       run: |
-        curl -L \
+        GH_TOKEN=$(curl -L \
           -X POST \
           -H "Accept: application/vnd.github+json" \
           -H "Authorization: Bearer ${{ steps.githubAppAuth.outputs.token }}" \
           -H "X-GitHub-Api-Version: 2022-11-28" \
-          https://api.github.com/repos/ravigundapi/gh-sh-runner/actions/runners/registration-token
+          https://api.github.com/repos/ravigundapi/gh-sh-runner/actions/runners/registration-token)
 
     - name: 'Building Docker Image'
       run: docker build . --file Dockerfile --build-arg RUNNER_VERSION=2.303.0 --tag github-runner --no-cache --progress=plain  
@@ -54,7 +54,7 @@ jobs:
 #       run: docker run -e GH_OWNER=https://github.com/ravigundapi/ -e GH_REPOSITORY=gh-sh-runner -e GH_TOKEN=${{ steps.githubAppAuth.outputs.token }} -d --name gh-hosted github-runner
       
     - name: 'Setting Up GitHub Hosted Agent'
-      run: docker run -e GH_OWNER='https://github.com/ravigundapi/' -e GH_REPOSITORY='gh-sh-runner' -e GH_TOKEN=[${{ steps.RegGithubAppAuth.outputs.token }}] -d --name gh-hosted github-runner
+      run: docker run -e GH_OWNER='https://github.com/ravigundapi/' -e GH_REPOSITORY='gh-sh-runner' -e GH_TOKEN='${{ steps.RegGithubAppAuth.outputs.token }}' -d --name gh-hosted github-runner
     
     - name: 'Building Docker Image'
       run: |
