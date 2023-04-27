@@ -1,15 +1,15 @@
-name: Build Image
-on: [push]
+# name: Build Image
+# on: [push]
   
-jobs:
-  build:
-    name: Build Image
-    runs-on: ubuntu-latest
-    steps:
-    - name: Check out code
-      uses: actions/checkout@v3
-    - name: 'Building Docker Image'
-      run: docker build . --file Dockerfile --build-arg RUNNER_VERSION=2.303.0 --tag github-runner --no-cache --progress=plain
+# jobs:
+#   build:
+#     name: Build Image
+#     runs-on: ubuntu-latest
+#     steps:
+#     - name: Check out code
+#       uses: actions/checkout@v3
+#     - name: 'Building Docker Image'
+#       run: docker build . --file Dockerfile --build-arg RUNNER_VERSION=2.303.0 --tag github-runner --no-cache --progress=plain
 #     - name: Obtain a GitHub App Installation Access Token
 #       id: githubAppAuth
 #       run: |
@@ -27,9 +27,31 @@ jobs:
 #       env:
 #         GITHUB_TOKEN: ${{ steps.githubAppAuth.outputs.token }}
         
-    - name: 'Setting Up GitHub Hosted Agent'
-      run: docker run -e GH_OWNER='ravigundapi' -e GH_REPOSITORY='gh-sh-runner' -e GH_TOKEN=ghs_37sJSYLqBtY5UoCHoPW84j1L0uEqM70V66FE -d --name gh-hosted github-runner
+#     - name: 'Setting Up GitHub Hosted Agent'
+#       run: docker run -e GH_OWNER='ravigundapi' -e GH_REPOSITORY='gh-sh-runner' -e GH_TOKEN=ghs_37sJSYLqBtY5UoCHoPW84j1L0uEqM70V66FE -d --name gh-hosted github-runner
 #       env:
 #           GITHUB_TOKEN: ${{ steps.githubAppAuth.outputs.token }}  
-    - name: 'Inspect runner'
-      run: docker logs -f gh-hosted
+#     - name: 'Inspect runner'
+#       run: docker logs -f gh-hosted
+
+name: get-token
+
+on: [push]
+
+jobs:
+  
+  print-token:
+    permissions: write-all
+    name: print-token
+    environment: dev
+    # needs: pre-pkr
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Get registration token
+        id: getRegToken
+        run: |
+          curl -X POST -H \"Accept: application/vnd.github.v3+json\"  -H 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' https://api.github.com/repos/ravigundapi/gh-sh-runner/actions/runners/registration-token
