@@ -8,38 +8,37 @@ jobs:
     steps:
     - name: Check out code
       uses: actions/checkout@v3
-#     - name: Install node and npm
-#       run: |
-#          sudo apt update -y
-#          sudo apt install nodejs
-#          sudo echo node -v
-#          sudo apt install npm 
-#          sudo npm --version
-#          sudo which npx
+    - name: Install node and npm
+      run: |
+         sudo apt update -y
+         sudo apt install nodejs
+         sudo echo node -v
+         sudo apt install npm 
+         sudo npm --version
+         sudo which npx
 #     - name: 'Building Docker Image'
 #       run: docker build . --file Dockerfile --build-arg RUNNER_VERSION=2.303.0 --tag github-runner --no-cache --progress=plain
-
-    - name: Generate token
-      id: generate_token
-      uses: tibdex/github-app-token@v1.8
-      with:
-         app_id: 324301
-         private_key: ${{ secrets.GH_APP_CREDENTIALS_TOKEN }}
-         repository: 'https://github.com/ravigundapi/gh-sh-runner'
-         installation_id: '36889031'
-    - name: Echo
-      run: echo "The value is ${{ steps.generate_token.outputs.token }}"
+#     - name: Generate token
+#       id: generate_token
+#       uses: tibdex/github-app-token@v1.8
+#       with:
+#          app_id: 324301
+#          private_key: ${{ secrets.GH_APP_CREDENTIALS_TOKEN }}
+#          repository: 'https://github.com/ravigundapi/gh-sh-runner'
+#          installation_id: '36889031'
+#     - name: Echo
+#       run: echo "The value is ${{ steps.generate_token.outputs.token }}"
       
-#     - name: Obtain a GitHub App Installation Access Token
-#       id: githubAppAuth
-#       run: |
-#         TOKEN="$(/usr/local/bin/npx obtain-github-app-installation-access-token -a 324301 -i 36889031 -k ci $GH_APP_CREDENTIALS_TOKEN)"
-#           echo $TOKEN
-#           echo "::add-mask::$TOKEN"
-#           echo "token=$TOKEN" >>$GITHUB_OUTPUT
-#       env:
-#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#         GH_APP_CREDENTIALS_TOKEN: ${{ secrets.GH_APP_CREDENTIALS_TOKEN }}
+    - name: Obtain a GitHub App Installation Access Token
+      id: githubAppAuth
+      run: |
+        TOKEN="$(/usr/local/bin/npx obtain-github-app-installation-access-token -a 324301 -i 36889031 -k ci $GH_APP_CREDENTIALS_TOKEN)"
+          echo $TOKEN
+          echo "::add-mask::$TOKEN"
+          echo "token=$TOKEN" >>$GITHUB_OUTPUT
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_APP_CREDENTIALS_TOKEN: ${{ secrets.GH_APP_CREDENTIALS_TOKEN }}
     - name: Use the obtained token
       run: |
         curl -X POST -H 'Content-Type: application/json' \
