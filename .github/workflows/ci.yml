@@ -39,7 +39,7 @@ jobs:
         curl -X --header "Accept: application/vnd.github+json" \
            -H "Authorization: Token ${{ steps.githubAppAuth.outputs.token }}" \
            -H "X-GitHub-Api-Version: 2022-11-28" \
-           "https://api.github.com/repos/ravigundapi/gh-sh-runner/actions/runners/registration-token"
+           https://api.github.com/repos/ravigundapi/gh-sh-runner/actions/runners/registration-token
 
 #     - name: 'Building Docker Image'
 #       run: docker build . --file Dockerfile --build-arg RUNNER_VERSION=2.303.0 --tag github-runner --no-cache --progress=plain  
