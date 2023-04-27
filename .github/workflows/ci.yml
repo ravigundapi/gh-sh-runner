@@ -11,25 +11,10 @@ jobs:
     - name: Install node and npm
       run: |
          sudo apt update -y
-         sudo apt install nodejs
-         sudo echo node -v
-         sudo apt install npm 
-         sudo npm --version
-         sudo which npx
-#     - name: 'Building Docker Image'
-#       run: docker build . --file Dockerfile --build-arg RUNNER_VERSION=2.303.0 --tag github-runner --no-cache --progress=plain
-#     - name: Generate token
-#       id: generate_token
-#       uses: tibdex/github-app-token@v1.8
-#       with:
-#          app_id: 324301
-#          private_key: ${{ secrets.GH_APP_CREDENTIALS_TOKEN }}
-#          repository: 'https://github.com/ravigundapi/gh-sh-runner'
-#          installation_id: '36889031'
-#     - name: Echo
-#       run: echo "The value is ${{ steps.generate_token.outputs.token }}"
-      
-    - name: Obtain a GitHub App Installation Access Token
+         sudo apt install nodejs npm
+    - name: 'Building Docker Image'
+      run: docker build . --file Dockerfile --build-arg RUNNER_VERSION=2.303.0 --tag github-runner --no-cache --progress=plain      
+    - name: 'Obtain a GitHub App Installation Access Token'
       id: githubAppAuth
       run: |
         TOKEN="$(/usr/local/bin/npx -y obtain-github-app-installation-access-token ci ${{ secrets.GH_APP_CREDENTIALS_TOKEN }})"
@@ -39,21 +24,18 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GH_APP_CREDENTIALS_TOKEN: ${{ secrets.GH_APP_CREDENTIALS_TOKEN }}
-    - name: Use the obtained token
+    - name: 'Use the obtained token'
       run: |
         curl -X POST -H 'Content-Type: application/json' \
            -H "Authorization: Bearer ${{ steps.githubAppAuth.outputs.token }}" \
            -d '{"context":"test","state":"success"}' \
            "https://api.github.com/repos/ravigundapi/gh-sh-runner/statuses/$GITHUB_SHA?access_token=$GITHUB_TOKEN"
       env:
-        GITHUB_TOKEN: ${{ steps.githubAppAuth.outputs.token }}
-        
-        
-        
-#     - name: 'Setting Up GitHub Hosted Agent'
-#       run: docker run -e GH_OWNER='ravigundapi' -e GH_REPOSITORY='gh-sh-runner' -e GH_TOKEN=ghs_37sJSYLqBtY5UoCHoPW84j1L0uEqM70V66FE -d --name gh-hosted github-runner
-#       env:
-#           GITHUB_TOKEN: ${{ steps.githubAppAuth.outputs.token }}  
-#     - name: 'Inspect runner'
-#       run: docker logs -f gh-hosted
+        GITHUB_TOKEN: ${{ steps.githubAppAuth.outputs.token }}    
+    - name: 'Setting Up GitHub Hosted Agent'
+      run: docker run -e GH_OWNER='ravigundapi' -e GH_REPOSITORY='gh-sh-runner' -e GH_TOKEN=ghs_37sJSYLqBtY5UoCHoPW84j1L0uEqM70V66FE -d --name gh-hosted github-runner
+      env:
+          GITHUB_TOKEN: ${{ steps.githubAppAuth.outputs.token }}  
+    - name: 'Inspect runner'
+      run: docker logs -f gh-hosted
 
