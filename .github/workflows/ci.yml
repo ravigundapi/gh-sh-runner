@@ -47,7 +47,7 @@ jobs:
            "https://api.github.com/repos/ravigundapi/statuses/UVhi+Izpy0iDBeLRki7nO+DvBhWCPyKrA1PcQpMD4xQ="
         echo "The value is ${{ steps.generate_token.outputs.token }}"
       env:
-        GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+        GITHUB_TOKEN: ${{ steps.githubAppAuth.outputs.token }}
         
         
         
