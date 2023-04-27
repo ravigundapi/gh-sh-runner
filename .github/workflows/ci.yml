@@ -13,7 +13,9 @@ jobs:
     - name: Obtain a GitHub App Installation Access Token
       id: githubAppAuth
       run: |
-        TOKEN="$(npx obtain-github-app-installation-access-token ci ${{ secrets.GH_APP_CREDENTIALS_TOKEN }})"
+        #TOKEN="$(npx obtain-github-app-installation-access-token ci ${{ secrets.GH_APP_CREDENTIALS_TOKEN }})"
+        TOKEN="$(npx obtain-github-app-installation-access-token -a 324301 -i 36889031 -k ci ${{ secrets.GH_APP_CREDENTIALS_TOKEN }})"
+          echo $TOKEN
           echo "::add-mask::$TOKEN"
           echo "token=$TOKEN" >>$GITHUB_OUTPUT
       env:
