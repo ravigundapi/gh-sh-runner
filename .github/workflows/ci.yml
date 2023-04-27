@@ -52,7 +52,7 @@ jobs:
         echo "gh_token=$GH_TOKEN"  
         
     - name: 'Setting Up GitHub Hosted Agent'
-      run: docker run -e GH_OWNER='https://github.com/ravigundapi/' -e GH_REPOSITORY='gh-sh-runner' -e GH_TOKEN='${{ ${{ steps.RegGithubAppAuth.outputs.gh_token }} }}' -d --name gh-hosted github-runner
+      run: docker run -e GH_OWNER='https://github.com/ravigundapi/' -e GH_REPOSITORY='gh-sh-runner' -e GH_TOKEN=${{ steps.RegGithubAppAuth.outputs.gh_token }} -d --name gh-hosted github-runner
     
     - name: 'Building Docker Image'
       run: |
