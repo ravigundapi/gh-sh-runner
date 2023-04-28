@@ -52,9 +52,7 @@ jobs:
         echo "GH_TOKEN=$GH_TOKEN" >> $GITHUB_ENV
       
     - name: 'Building GitHub Hosted Runner'
-      run: docker run -e GH_OWNER='https://github.com/ravigundapi/' -e GH_REPOSITORY='gh-sh-runner' -e GH_TOKEN='${{ env.GH_TOKEN }}' -d --name github-hosted-agent github-runner:latest
-      env:
-        GH_TOKEN: ${{ env.GH_TOKEN }}
+      run: docker run -e GH_OWNER=https://github.com/ravigundapi/ -e GH_REPOSITORY=gh-sh-runner -e GH_TOKEN=${{ env.GH_TOKEN }} -d --name github-hosted-agent github-runner:latest
         
     - name: 'Checking Docker Instance'
       run: |
